@@ -1,30 +1,26 @@
-import React, { useState, useEffect } from 'react';
-import Home from './Home';
-import Dashboard from './Dashboard';
+import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import MainLayout from './layouts/MainLayout';
+import Home from './pages/Home';
+import Dashboard from './pages/Dashboard';
+import RulesConfig from './pages/RulesConfig';
+import Analytics from './pages/Analytics';
+import Settings from './pages/Settings';
 
 const App: React.FC = () => {
-    const [route, setRoute] = useState(window.location.hash || '#/');
-
-    useEffect(() => {
-        const handleHashChange = () => {
-            setRoute(window.location.hash || '#/');
-        };
-
-        window.addEventListener('hashchange', handleHashChange);
-        return () => {
-            window.removeEventListener('hashchange', handleHashChange);
-        };
-    }, []);
-
-    const renderContent = () => {
-        switch (route) {
-            case '#/dashboard':
-                return <Dashboard />;
-            case '#/':
-            default:
-                return <Home />;
-        }
-    };
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<MainLayout />}>
+          <Route index element={<Home />} />
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="rules" element={<RulesConfig />} />
+          <Route path="analytics" element={<Analytics />} />
+          <Route path="settings" element={<Settings />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  );
 
     return (
         <div className="min-h-screen bg-zinc-950 text-zinc-100 font-sans">
