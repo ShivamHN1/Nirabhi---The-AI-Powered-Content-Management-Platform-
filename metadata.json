@@ -1,0 +1,6 @@
+{
+  "name": "Nirabhi AI Content Moderator",
+  "description": "An AI-powered content moderation tool using the Gemini API to analyze text for guideline violations.",
+  "requestFramePermissions": [],
+  "prompt": ""
+}
