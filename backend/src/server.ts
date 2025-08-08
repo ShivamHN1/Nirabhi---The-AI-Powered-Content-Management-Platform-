@@ -41,6 +41,28 @@ interface SimulatedAction {
 app.use(cors());
 app.use(express.json());
 
+// --- Basic routes ---
+app.get('/', (req: ExpressRequest, res: ExpressResponse) => {
+    res.json({
+        status: 'ok',
+        message: 'Nirabhi AI Backend API',
+        endpoints: {
+            rules: {
+                get: '/api/rules',
+                post: '/api/rules',
+                delete: '/api/rules/:id'
+            },
+            analyze: {
+                post: '/api/analyze'
+            }
+        }
+    });
+});
+
+app.get('/health', (req: ExpressRequest, res: ExpressResponse) => {
+    res.json({ status: 'ok' });
+});
+
 // --- "THE GUARD" API ENDPOINTS ---
 
 app.get('/api/rules', (req: ExpressRequest, res: ExpressResponse) => {
