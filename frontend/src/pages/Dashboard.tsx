@@ -1,4 +1,7 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { Card } from '../components/Card';
+import { AnimatedCounter } from '../components/AnimatedCounter';
+import { config } from '../config';
 
 // --- TYPES AND INTERFACES ---
 interface AnalysisResult {
@@ -33,19 +36,9 @@ const SAMPLE_DATA = [
     "This is just vile hate speech.",
 ].join('\n');
 
-const BACKEND_URL = 'http://localhost:3001';
+const BACKEND_URL = config.API_URL;
 
-// --- HELPER FUNCTIONS & COMPONENTS ---
-
-const Card: React.FC<{ title: string; children: React.ReactNode, className?: string, icon?: JSX.Element }> = ({ title, children, className = '', icon }) => (
-    <div className={`bg-zinc-900/70 p-6 rounded-xl shadow-lg border border-zinc-800 ${className}`}>
-        <div className="flex items-center gap-3 mb-4">
-            {icon && <div className="text-zinc-400">{icon}</div>}
-            <h2 className="text-xl font-bold text-white">{title}</h2>
-        </div>
-        {children}
-    </div>
-);
+// --- HELPER FUNCTIONS ---
 
 const getDecisionAppearance = (decision: 'ALLOW' | 'FLAG' | 'BLOCK' | 'ERROR') => {
     switch (decision) {
@@ -76,34 +69,7 @@ const highlightProblematicPhrase = (text: string, phrase?: string) => {
     );
 };
 
-const AnimatedCounter: React.FC<{ value: number; className?: string }> = ({ value, className = '' }) => {
-    const [count, setCount] = useState(0);
-    const ref = useRef(0);
-    const stepDuration = 20; // ms
 
-    useEffect(() => {
-        ref.current = 0;
-        const accumulator = value / (500 / stepDuration); // Animate over ~500ms
-        
-        const updateCounter = () => {
-            if (ref.current < value) {
-                ref.current = Math.min(ref.current + accumulator, value);
-                setCount(Math.ceil(ref.current));
-                setTimeout(updateCounter, stepDuration);
-            } else {
-                setCount(value);
-            }
-        };
-
-        if (value > 0) {
-           updateCounter();
-        } else {
-           setCount(0);
-        }
-    }, [value]);
-
-    return <span className={className}>{count}</span>;
-};
 
 
 // --- MAIN DASHBOARD COMPONENT ---

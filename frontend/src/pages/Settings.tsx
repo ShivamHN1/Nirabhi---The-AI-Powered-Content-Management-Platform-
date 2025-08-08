@@ -3,39 +3,39 @@ import React from 'react';
 const Settings: React.FC = () => {
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-semibold text-gray-900">Settings</h1>
-      <div className="bg-white shadow rounded-lg">
+      <h1 className="text-2xl font-semibold text-content-primary">Settings</h1>
+      <div className="bg-surface-secondary shadow-soft rounded-lg">
         <div className="px-4 py-5 sm:p-6">
           <div className="space-y-6">
             <div>
-              <h3 className="text-lg font-medium text-gray-900">API Configuration</h3>
+              <h3 className="text-lg font-medium text-content-primary">API Configuration</h3>
               <div className="mt-2">
                 <input
                   type="password"
                   name="apiKey"
-                  className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                  className="bg-surface-tertiary text-content-primary shadow-soft focus:ring-accent-primary focus:border-accent-primary block w-full sm:text-sm border-surface-tertiary rounded-md"
                   placeholder="Enter your Gemini API key"
                 />
               </div>
             </div>
             <div>
-              <h3 className="text-lg font-medium text-gray-900">Notification Preferences</h3>
+              <h3 className="text-lg font-medium text-content-primary">Notification Preferences</h3>
               <div className="mt-2 space-y-4">
                 <div className="flex items-center">
                   <input
                     type="checkbox"
-                    className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                    className="h-4 w-4 text-accent-primary focus:ring-accent-muted border-surface-tertiary rounded bg-surface-tertiary"
                   />
-                  <label className="ml-2 text-sm text-gray-700">
+                  <label className="ml-2 text-sm text-content-secondary">
                     Email notifications for high-risk content
                   </label>
                 </div>
                 <div className="flex items-center">
                   <input
                     type="checkbox"
-                    className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                    className="h-4 w-4 text-accent-primary focus:ring-accent-muted border-surface-tertiary rounded bg-surface-tertiary"
                   />
-                  <label className="ml-2 text-sm text-gray-700">
+                  <label className="ml-2 text-sm text-content-secondary">
                     Daily summary reports
                   </label>
                 </div>
@@ -43,10 +43,10 @@ const Settings: React.FC = () => {
             </div>
           </div>
         </div>
-        <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
+        <div className="px-4 py-3 bg-surface-tertiary text-right sm:px-6 rounded-b-lg">
           <button
             type="submit"
-            className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            className="inline-flex justify-center py-2 px-4 border border-transparent shadow-soft text-sm font-medium rounded-md text-content-primary bg-accent-primary hover:bg-accent-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent-muted"
           >
             Save Changes
           </button>

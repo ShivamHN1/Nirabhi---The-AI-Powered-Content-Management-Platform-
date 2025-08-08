@@ -4,6 +4,18 @@
 
 @layer base {
   body {
-    @apply bg-zinc-900 text-gray-100;
+    @apply bg-surface-primary text-content-primary;
+  }
+
+  ::-webkit-scrollbar {
+    @apply w-2;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-surface-primary;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-surface-tertiary rounded-full hover:bg-accent-muted transition-colors;
   }
 }

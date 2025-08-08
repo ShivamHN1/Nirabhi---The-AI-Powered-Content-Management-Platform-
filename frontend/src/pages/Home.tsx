@@ -1,12 +1,13 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const FeatureCard: React.FC<{ icon: JSX.Element; title: string; children: React.ReactNode }> = ({ icon, title, children }) => (
-    <div className="bg-zinc-900/70 p-6 rounded-xl shadow-lg border border-zinc-800 h-full">
+    <div className="bg-surface-secondary/95 p-6 rounded-xl shadow-soft border border-surface-tertiary/20 backdrop-blur-sm hover:shadow-glow transition-shadow duration-300 h-full">
         <div className="flex items-center gap-4 mb-3">
-            <div className="bg-cyan-600/20 p-2 rounded-lg text-cyan-400">{icon}</div>
-            <h3 className="text-xl font-semibold text-white">{title}</h3>
+            <div className="bg-accent-muted p-2 rounded-lg text-accent-primary">{icon}</div>
+            <h3 className="text-xl font-semibold text-content-primary">{title}</h3>
         </div>
-        <p className="text-zinc-400">{children}</p>
+        <p className="text-content-secondary">{children}</p>
     </div>
 );
 
@@ -15,23 +16,23 @@ const Home: React.FC = () => {
         <div className="max-w-5xl mx-auto p-4 sm:p-6 lg:p-8">
             <section className="text-center py-16 sm:py-24">
                 <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight">
-                    <span className="block bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-teal-500">
+                    <span className="block bg-clip-text text-transparent bg-gradient-to-r from-accent-primary to-accent-muted">
                         Elevate Your Moderators
                     </span>
-                    <span className="block text-zinc-300 mt-2">
+                    <span className="block text-content-primary mt-2">
                         Build Healthier Communities
                     </span>
                 </h1>
-                <p className="mt-6 max-w-2xl mx-auto text-lg text-zinc-400">
+                <p className="mt-6 max-w-2xl mx-auto text-lg text-content-secondary">
                     Nirabhi is a Community Intelligence Platform designed to transform moderation from a reactive chore into a proactive strategy. Give your team the AI-powered tools they need to foster a thriving, safe, and engaging online space.
                 </p>
                 <div className="mt-10">
-                    <a
-                        href="#/dashboard"
-                        className="inline-block px-8 py-4 bg-cyan-600 hover:bg-cyan-700 text-white font-semibold rounded-lg shadow-lg transform hover:-translate-y-1 transition-all duration-300"
+                    <Link
+                        to="/dashboard"
+                        className="inline-block px-8 py-4 bg-accent-primary hover:bg-accent-hover text-content-primary font-semibold rounded-lg shadow-soft hover:shadow-glow transform hover:-translate-y-1 transition-all duration-300"
                     >
                         Go to Dashboard
-                    </a>
+                    </Link>
                 </div>
             </section>
 
