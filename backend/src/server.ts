@@ -1,11 +1,18 @@
 
 import express, { Request as ExpressRequest, Response as ExpressResponse } from 'express';
 import cors from 'cors';
-import { GoogleGenAI, Type } from "@google/genai";
+import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from '@google/generative-ai';
 import 'dotenv/config';
 
 const app = express();
 const port = process.env.PORT || 3001;
+
+// Initialize Gemini AI
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
+const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
+
+// Initialize rules array
+let rules: Rule[] = [];
 
 // --- TYPES ---
 interface Rule {
@@ -80,36 +87,48 @@ app.post('/api/analyze', async (req: ExpressRequest, res: ExpressResponse) => {
 
     try {
         const analysisPromises = lines.map(line =>
-            ai.models.generateContent({
-                model: model,
-                contents: `Analyze the following user comment for guideline violations. Your response must be a single JSON object. The comment is: "${line}".`,
-                config: {
-                    responseMimeType: "application/json",
-                    responseSchema: {
-                        type: Type.OBJECT,
-                        properties: {
-                            decision: { type: Type.STRING, enum: ['ALLOW', 'FLAG', 'BLOCK'], description: 'Your final verdict.' },
-                            reason: { type: Type.STRING, description: 'A brief explanation for your decision.' },
-                            categories: { type: Type.ARRAY, items: { type: Type.STRING }, description: 'Violation categories like SPAM, HATE_SPEECH, etc. If none, return an empty array.' },
-                            problematicPhrase: { type: Type.STRING, description: 'The exact phrase that is problematic. If none, this can be omitted.' }
-                        },
-                        required: ['decision', 'reason', 'categories']
-                    }
+            model.generateContent({
+                contents: [{
+                    role: 'user',
+                    parts: [{
+                        text: `Analyze the following user comment for guideline violations. Your response must be a single JSON object. The comment is: "${line}".
+                        Format your response as a JSON with:
+                        {
+                            "decision": "ALLOW" | "FLAG" | "BLOCK",
+                            "reason": "brief explanation",
+                            "categories": ["category1", "category2"],
+                            "problematicPhrase": "optional problematic text"
+                        }`
+                    }]
+                }],
+                generationConfig: {
+                    temperature: 0.1,
+                    maxOutputTokens: 1000,
                 }
             })
         );
 
         const responses = await Promise.all(analysisPromises);
         
-        const analysisResults: AnalysisResult[] = responses.map((response, index) => {
-            try {
-                const parsed = JSON.parse(response.text.trim());
-                return { ...parsed, originalText: lines[index] };
-            } catch (e) {
-                console.error(`Error parsing JSON for line: ${lines[index]}`, e);
-                return { originalText: lines[index], decision: 'FLAG', reason: 'Failed to parse AI response.', categories: ['ERROR'], problematicPhrase: '' };
-            }
-        });
+        const analysisResults: AnalysisResult[] = await Promise.all(
+            responses.map(async (response, index: number) => {
+                try {
+                    const result = await response.response;
+                    const text = result.text();
+                    const parsed = JSON.parse(text.trim());
+                    return { ...parsed, originalText: lines[index] };
+                } catch (e) {
+                    console.error(`Error parsing JSON for line: ${lines[index]}`, e);
+                    return { 
+                        originalText: lines[index], 
+                        decision: 'FLAG' as const, 
+                        reason: 'Failed to parse AI response.', 
+                        categories: ['ERROR'], 
+                        problematicPhrase: '' 
+                    };
+                }
+            })
+        );
 
         // --- SERVER-SIDE SIMULATION ---
         const simulationReport: SimulatedAction[] = [];
